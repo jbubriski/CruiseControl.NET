@@ -128,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private readonly IFileSystem _fileSystem;
 		private readonly IFileDirectoryDeleter _fileDirectoryDeleter;
-		private BuildProgressInformation _buildProgressInformation;
+        private BuildProgressInformation _buildProgressInformation;
 
         /// <summary>
         /// Whether to fetch the updates from the repository and checkout the branch for a particular build. 
@@ -137,6 +137,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
         public bool AutoGetSource { get; set; }
+
+        /// <summary>
+        /// Whether to fetch the updates from the repository and checkout the branch for a particular build. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>true</default>
+        [ReflectorProperty("cleanUntrackedFiles", Required = false)]
+        public bool CleanUntrackedFiles { get; set; }
 
         /// <summary>
         /// The location of the Git executable. 
@@ -316,7 +324,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 GitUpdateSubmodules(result);
 
 			// clean up the local working copy
-			GitClean(result);
+            if (CleanUntrackedFiles)
+			    GitClean(result);
 		}
 
         /// <summary>
